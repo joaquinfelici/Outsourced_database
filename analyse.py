@@ -54,6 +54,7 @@ if __name__ == '__main__':
     print 'Prediction:',  clf.predict([input]).tolist()[0]
     print 'Prediction Distribution:',  clf.predict_proba([input]).tolist()[0]
 
+
 #    The classifier totally overfits on the training data
 #    Prediction: 25
 #    Prediction Distribution: [0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0]
