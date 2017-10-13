@@ -30,6 +30,7 @@ if __name__ == '__main__':
     acc = 0
     for target_row in range(100):#len(target_attribute)):
         actual_value = target_attribute[target_row]  
+        print actual_value
         training_data = []
         for label in range (lower, higher + 1, 1): # create n histograms for each label
             target_attribute[target_row] = label  
@@ -53,11 +54,12 @@ if __name__ == '__main__':
         #train classifier
         clf = train_classifier(train, labels, mla = 'GNB')  #$mla specifies training algorithm to use
         #predict
-        
+        print input
         if actual_value == clf.predict([input]).tolist()[0]:
             acc += 1
-        #print 'Prediction Distribution:',  clf.predict_proba([input]).tolist()[0]
-    print acc
+        print clf.predict([input]).tolist()[0]
+        print 'Prediction Distribution:',  clf.predict_proba([input]).tolist()[0]
+    print "acc:", acc
     
     elapsed_time = time.time() - start_time
     print ('Elapsed time ' + time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
