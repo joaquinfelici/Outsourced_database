@@ -44,10 +44,15 @@ ATT_NAMES = ['age', 'workclass', 'final_weight', 'education',
 #'True' means that the attribute is categorical 
 CATEGORY = [False, True, False, True, False, True, True,  True,  True,  True,  False,  False,  False,  True,  True]
 
-# Attributes to consider: 'education', 'marital_status', 'occupation', 'hours_per_week', 'native_country'
+#Attributes to consider: 'education', 'marital_status', 'occupation', 'hours_per_week', 'native_country'
 att_INDEX = [3, 5, 6, 12, 13]
 # Target attribute: age
 target_INDEX = 0
+
+
+#att_INDEX = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+#target_INDEX = 14
+
 
 def read_adult_data():
     """

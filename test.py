@@ -8,8 +8,21 @@ from utils.read_data import read_adult_data
 from utils.methods import *
 import numpy as np
 import random 
+import copy
 
 
+def write_data(data,  filename):
+    """
+    Write data to filename.
+    $data is list of lists.
+    """
+    f = open(filename, 'w')
+    for line in data:
+        f.write(', '.join(str(x) for x in line) + '\n')
+    f.close()
+    return 0 
+        
+        
 if __name__ == '__main__':
     
     #Read data from a file
@@ -18,6 +31,21 @@ if __name__ == '__main__':
     #Print first record
     print DATA[0]
     
+    #Randomlly select $size lines from data, if size < len(data).  
+    selected_DATA = []
+    length = len(DATA)
+    size = 100
+    temp_DATA = copy.deepcopy(DATA) #copy data
+    if size <= length:
+        counter = 0
+        while(counter < size):
+            i = random.choice(range(len(temp_DATA)))
+            selected_DATA.append(temp_DATA.pop(i))
+            counter += 1
+
+    #Write selected data to a file
+    write_data(selected_DATA, 'data.txt')
+
     #Generate some random data (1000 records) to train a classifier
     random_DATA = []
     for i in range(0, 1000, 1):

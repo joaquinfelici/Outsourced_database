@@ -1,8 +1,8 @@
 from utils.read_data import read_adult_data
 from utils.methods import *
 import numpy as np
-import random 
 import time
+import copy
 
 def get_column(matrix, i): # returns only one colum of the matrix
     try:
@@ -23,22 +23,24 @@ if __name__ == '__main__':
     target_row = 3  # row (user) we're interested in
     n = 1           # number of histograms per label
 
-    target_data = get_column(DATA, target_col) # the column itself
-
-    #target_data = [11,22,33,55,66,77,88,99]
-
-    lower = min(target_data)    # minimum range for age
-    higher = max(target_data)   # maximum range for age
-
+    target_attribute = get_column(DATA, target_col) # the column itself
+    lower = min(target_attribute)    # minimum range for age
+    higher = max(target_attribute)   # maximum range for age
+    #print lower   
+    #print higher  
+        
     training_data = []
+    actual_value = target_attribute[target_row]  #actua value is 25 for target_row =3
     for label in range (lower, higher + 1, 1): # create n histograms for each label
-        target_data[target_row] = label   
+        target_attribute[target_row] = label  
         for j in range(0, n, 1): # create n histograms for label k     
-            histogram = [0] * (len(target_data)+1)
-            for i in range(0, 1000, 1): # create one histogram
+            histogram = [0] * (len(target_attribute)+1)
+            for i in range(0, 10000, 1): # create one histogram
                 a = int(np.random.uniform(lower, higher))
                 b = int(np.random.uniform(lower, higher))
-                histogram[len(get_range(target_data, min(a,b), max(a,b)))] += 1
+                histogram[len(get_range(target_attribute, min(a,b), max(a,b)))] += 1
+            if label == actual_value:
+                input  = copy.deepcopy(histogram) #copy data
             training_data.append([histogram, label])
 
     train = np.array(get_column(training_data, 0))
@@ -48,7 +50,11 @@ if __name__ == '__main__':
     elapsed_time = time.time() - start_time
     print ('Elapsed time ' + time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
 
-    input = np.array(train[target_row])
+    #input = np.array(train[target_row])
     print 'Prediction:',  clf.predict([input]).tolist()[0]
     print 'Prediction Distribution:',  clf.predict_proba([input]).tolist()[0]
+
+#    The classifier totally overfits on the training data
+#    Prediction: 25
+#    Prediction Distribution: [0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
