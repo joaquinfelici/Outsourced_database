@@ -44,7 +44,7 @@ ATT_NAMES = ['age', 'workclass', 'final_weight', 'education',
 #'True' means that the attribute is categorical 
 CATEGORY = [False, True, False, True, False, True, True,  True,  True,  True,  False,  False,  False,  True,  True]
 
-#Attributes to consider: 'education', 'marital_status', 'occupation', 'hours_per_week', 'native_country'
+# Attributes to consider: 'education', 'marital_status', 'occupation', 'hours_per_week', 'native_country'
 att_INDEX = [3, 5, 6, 12, 13]
 # Target attribute: age
 target_INDEX = 0
