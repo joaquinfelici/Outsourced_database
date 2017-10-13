@@ -54,7 +54,6 @@ if __name__ == '__main__':
         #train classifier
         clf = train_classifier(train, labels, mla = 'GNB')  #$mla specifies training algorithm to use
         #predict
-        print input
         if actual_value == clf.predict([input]).tolist()[0]:
             acc += 1
         print clf.predict([input]).tolist()[0]
