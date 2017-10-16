@@ -37,3 +37,13 @@ def train_classifier(training_data, label, mla='BNB'):
     return model 
 
 
+def write_data(data,  filename):
+    """
+    Write data to filename.
+    $data is list of lists.
+    """
+    f = open(filename, 'w')
+    for line in data:
+        f.write(', '.join(str(x) for x in line) + '\n')
+    f.close()
+    return 0 

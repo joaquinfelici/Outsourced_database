@@ -10,17 +10,6 @@ import numpy as np
 import random 
 import copy
 
-
-def write_data(data,  filename):
-    """
-    Write data to filename.
-    $data is list of lists.
-    """
-    f = open(filename, 'w')
-    for line in data:
-        f.write(', '.join(str(x) for x in line) + '\n')
-    f.close()
-    return 0 
         
         
 if __name__ == '__main__':
