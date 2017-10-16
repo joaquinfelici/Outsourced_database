@@ -36,7 +36,7 @@ if __name__ == '__main__':
             target_attribute[target_row] = label  
             for j in range(0, n, 1): # create n histograms for label k     
                 histogram = [0] * (len(target_attribute)+1)
-                for i in range(0, width**4, 1): # create one histogram
+                for i in range(0, width**3, 1): # create one histogram
                     a = int(np.random.uniform(lower, higher))
                     b = int(np.random.uniform(lower, higher))
                     histogram[len(get_range(target_attribute, min(a,b), max(a,b)))] += 1
