@@ -1,6 +1,6 @@
 from utils.read_data import read_adult_data
-from utils.reduce_database import reduce_database
-from utils.methods import *
+from utils.methods import reduce_database
+from utils.methods import train_classifier
 import numpy as np
 import time
 import copy
@@ -88,5 +88,6 @@ def make_predictions(target_col, nb_iterations, n, hist_samples, mla='GNB'):
 
     a = '%.2f'%(acc*100/float(nb_iterations))
     print (bcolors.BOLD + 'Accuracy was ' + a + '%' + bcolors.ENDC)
+    return a
 
 

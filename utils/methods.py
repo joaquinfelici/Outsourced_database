@@ -8,6 +8,10 @@ from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import tree
 
+from utils.read_data import read_adult_data
+import copy
+
+
 def train_classifier(training_data, label, mla='BNB'):
     """
     Trains a ML classifier based on $mla using data $training_data. 
@@ -34,16 +38,17 @@ def train_classifier(training_data, label, mla='BNB'):
         print 
         model = BernoulliNB()
     model.fit(training_data, label)
-    return model 
+    return model
 
 
-def write_data(data,  filename):
-    """
-    Write data to filename.
-    $data is list of lists.
-    """
-    f = open(filename, 'w')
-    for line in data:
-        f.write(', '.join(str(x) for x in line) + '\n')
-    f.close()
-    return 0 
+def reduce_database(min, max, size, filename):
+    with open("data/adult.all") as infile, open(filename, "w") as outfile:
+        collector = []
+        counter = 0
+
+        for line in infile:
+            if (counter >= size):
+                break
+            elif (int(line.split(',')[0]) >= min and int(line.split(',')[0]) <= max):
+                outfile.write(line)
+                counter += 1
