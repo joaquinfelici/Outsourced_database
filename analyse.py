@@ -31,11 +31,36 @@ def get_uniform_pair(option, combinations =[]): # select 0 to generate both valu
         a = int(np.random.uniform(0, len(combinations)))
         return combinations[a]
 
-def make_predictions(target_col, nb_iterations, n, hist_samples, mla='GNB'):
+def bucketize(data, width):
+    """
+    Takes a list and buketize each $width elements into one bucket
+    by adding up all the related values.
+    ex: buketize([1,4,3,6], 2) results in [5,9]
+    :param data: a list of integers
+    :param width: the width of each bucket
+    :return: resulting list
+    """
+    result = []
+    counter = 0
+    summ = 0
+    for x in data:
+        if counter < width:
+            summ += x
+            counter += 1
+        else:
+            result.append(summ)
+            summ = x
+            counter = 1
+    result.append(summ)
+    return result
+
+
+
+def make_predictions(target_col, nb_iterations, n, hist_samples, b_width, mla='GNB'):
 
     # read dataset from a file
     DATA, IS_CAT = read_adult_data()
- 
+
     target_attribute = get_column(DATA, target_col) # the column itself
     lower = min(target_attribute)    # minimum value for target attribute
     higher = max(target_attribute)   # maximum value for target attribute
@@ -47,16 +72,18 @@ def make_predictions(target_col, nb_iterations, n, hist_samples, mla='GNB'):
         nb_iterations = len(target_attribute)
     for target_row in range(0, nb_iterations, 1): # len(target_attribute)):
         print ("(" + str(target_row) + ") Generating training data...")
-        actual_value = target_attribute[target_row]  
+        actual_value = target_attribute[target_row]
         training_data = []
         for label in range (lower, higher + 1, 1): # create n histograms for each label
-            target_attribute[target_row] = label  
-            for j in range(0, n, 1): # create n histograms for label k     
+            target_attribute[target_row] = label
+            for j in range(0, n, 1): # create n histograms for label k
                 histogram = [0] * (len(target_attribute)+1)
                 for i in range(0, hist_samples, 1): # create one histogram
                     pair = get_uniform_pair(1, combinations)
                     histogram[len(get_range(target_attribute, pair[0], pair[1]))] += 1
-                    training_data.append([histogram, label])
+                    # bucketize into b_width buckets
+                    h = bucketize(histogram, b_width)
+                    training_data.append([h, label])
         #restore the original database
         target_attribute[target_row] = actual_value
 
@@ -65,20 +92,19 @@ def make_predictions(target_col, nb_iterations, n, hist_samples, mla='GNB'):
         for i in range(0, hist_samples, 1): # create one histogram
             pair = get_uniform_pair(1, combinations)
             histogram[len(get_range(target_attribute, pair[0], pair[1]))] += 1
-        input = copy.deepcopy(histogram)
+        input = copy.deepcopy(bucketize(histogram, b_width))
 
         print "Training classifier..."
-        
+
         # prepare training data
-        train = np.array(get_column(training_data, 0))
-        labels = np.array(get_column(training_data, 1))
-        
+        X = np.array(get_column(training_data, 0))
+        Y = np.array(get_column(training_data, 1))
         # train classifier
-        clf = train_classifier(train, labels, mla)  # mla specifies training algorithm to use
-        
+        clf = train_classifier(X, Y, mla)  # mla specifies training algorithm to use
+
         # predict
         predicted_value = clf.predict([input]).tolist()[0]
-        
+
         if actual_value == predicted_value:
             acc += 1.0
             print  bcolors.OKGREEN + "Prediction is correct" + bcolors.ENDC
