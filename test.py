@@ -44,3 +44,4 @@ if __name__ == '__main__':
             f = open(filename, 'a')
             f.write('%d\t%d\t%s\t%s\n'%(N, histogram_samples, ACCURACY['%d_%d'%(N, histogram_samples)], c_TIME['%d_%d'%(N, histogram_samples)]))
             f.close()
+
