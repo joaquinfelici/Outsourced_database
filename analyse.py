@@ -66,7 +66,6 @@ def make_predictions(target_col, nb_iterations, n, hist_samples, mla='GNB'):
             pair = get_uniform_pair(1, combinations)
             histogram[len(get_range(target_attribute, pair[0], pair[1]))] += 1
         input = copy.deepcopy(histogram)
-        print input
 
         print "Training classifier..."
         
