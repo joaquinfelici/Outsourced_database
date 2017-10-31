@@ -68,8 +68,8 @@ def read_adult_data():
         line = line.strip()
         #remove empty and incomplete lines
         #only 45222 records will remain 
-        if len(line) == 0 or '?' in line:
-            continue
+        #if len(line) == 0 or '?' in line:
+        #    continue
         #remove spaces
         line = line.replace(' ', '')
         #split according to ','

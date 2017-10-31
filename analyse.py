@@ -52,8 +52,7 @@ def bucketize(data, width):
             summ = x
             counter = 1
     result.append(summ)
-    return result
-
+    return np.array(result)
 
 
 def make_predictions(target_col, nb_iterations, n, hist_samples, b_width, mla='GNB'):
@@ -70,37 +69,36 @@ def make_predictions(target_col, nb_iterations, n, hist_samples, b_width, mla='G
     acc = 0.0
     if nb_iterations == -1:
         nb_iterations = len(target_attribute)
+        print nb_iterations
     for target_row in range(0, nb_iterations, 1): # len(target_attribute)):
         print ("(" + str(target_row) + ") Generating training data...")
         actual_value = target_attribute[target_row]
         training_data = []
+        Labels = []
         for label in range (lower, higher + 1, 1): # create n histograms for each label
             target_attribute[target_row] = label
             for j in range(0, n, 1): # create n histograms for label k
-                histogram = [0] * (len(target_attribute)+1)
+                histogram = np.zeros(len(target_attribute)+1)
                 for i in range(0, hist_samples, 1): # create one histogram
                     pair = get_uniform_pair(1, combinations)
                     histogram[len(get_range(target_attribute, pair[0], pair[1]))] += 1
                     # bucketize into b_width buckets
                     h = bucketize(histogram, b_width)
-                    training_data.append([h, label])
+                    training_data.append(h)
+                    Labels.append(label)
         #restore the original database
         target_attribute[target_row] = actual_value
 
         # generate input
-        histogram = [0] * (len(target_attribute)+1)
+        input = np.zeros(len(target_attribute)+1)
         for i in range(0, hist_samples, 1): # create one histogram
             pair = get_uniform_pair(1, combinations)
-            histogram[len(get_range(target_attribute, pair[0], pair[1]))] += 1
-        input = copy.deepcopy(bucketize(histogram, b_width))
+            input[len(get_range(target_attribute, pair[0], pair[1]))] += 1
 
         print "Training classifier..."
+        print len(training_data[0])
 
-        # prepare training data
-        X = np.array(get_column(training_data, 0))
-        Y = np.array(get_column(training_data, 1))
-        # train classifier
-        clf = train_classifier(X, Y, mla)  # mla specifies training algorithm to use
+        clf = train_classifier(training_data, np.array(Labels), mla)  # mla specifies training algorithm to use
 
         # predict
         predicted_value = clf.predict([input]).tolist()[0]

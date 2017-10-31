@@ -6,9 +6,10 @@ Test make_predictions method
 # coding=utf-8
 from analyse import *
 
+
 MLA = 'GNB'
-NB_histogram = [10, 100, 1000]
-NB_samples = [10**3, 10**4, 10**5]
+NB_histogram = [1]
+NB_samples = [10**2]
 
 c_TIME = dict()
 ACCURACY = dict()
@@ -21,8 +22,8 @@ if __name__ == '__main__':
     #reduce_database(age_min, age_max, size, "data/adult-short.all")
 
     target_column = 5  # target attribute position (5 is age)
-    Nb_iterations = -1 # nb. of records to consider (-1 to consider all records)
-    bucket_width = 10 # width used to bucketize features (histogram)
+    Nb_iterations = 1 # nb. of records to consider (-1 to consider all records)
+    bucket_width = 1 # width used to bucketize features (histogram)
 
     #N = 10          # number of histograms per label
     #histogram_samples = 1000 # number of samples per histogram
@@ -32,6 +33,7 @@ if __name__ == '__main__':
     f = open(filename, 'w')
     f.write('Nb. Hist.\tNb. Samples\tAccuracy\tTime\n')
     f.close()
+
 
     for N in NB_histogram:
         for histogram_samples in NB_samples:
