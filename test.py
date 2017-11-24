@@ -40,7 +40,9 @@ if __name__ == '__main__':
             accuracy = make_predictions(target_column, Nb_iterations, N, histogram_samples, MLA)
             ACCURACY['%d_%d'%(N, histogram_samples)] = accuracy
             elapsed_time = time.time() - start_time
-            c_TIME['%d_%d'%(N, histogram_samples)] = time.strftime("%Hh:%Mm:%Ss", time.gmtime(elapsed_time))
+            m, s = divmod(elapsed_time, 60)
+            h, m = divmod(m, 60)
+            c_TIME['%d_%d'%(N, histogram_samples)] = '%d:%02d:%02d'%(h, m, s)
 
             # append data to filename
             f = open(filename, 'a')
