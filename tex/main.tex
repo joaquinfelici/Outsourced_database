@@ -1,0 +1,75 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor,colortbl}
+\usepackage{nicefrac}  
+\usepackage{amssymb}
+\usepackage{array}
+\definecolor{Gray}{gray}{0.9}
+\newcommand{\col}[1]{\multicolumn{2}{c|}{#1}}
+%\newcolumntype{gl}{>{\columncolor{Gray}}l}
+
+\newcommand{\calK}{\mathcal{K}}
+
+\begin{document}
+
+\section{Volume Attack using Machine Learning}
+Let $D$ be a database of the form $\{(r_1, k_1), \ldots, (r_n, k_n)\}$, where 
+search keys $\{k_1, \ldots, k_n\}$ are elements of domain $\calK$. 
+Assume that we know the values of all keys in $D$ except the value of key $k_i$. 
+Note that, it is not necessary to know the values of $\{r_1, \ldots, r_n\}$. 
+The goal is to train a classifier in order to predict the value of $k_i$. 
+
+The training data for the classifier is prepared as follows:
+for every $k_j$ in the key domain $\calK$, 
+we assume that $k_i = k_j$ (i.e. we set the value of $k_i$ into $k_j$) 
+then we perform $N$ uniform queries on the resulting 
+database. For each query we count the number of the output records so that 
+we will have at the end a histogram, which constitute with the label $k_j$ 
+a training record. Note that for each label $k_j$, $m$ histograms may be generated. 
+Repeating the process for every $k_j \in \calK$ will result in $m.|\calK|$ training records, 
+each consists of $n+1$ features: the number of output records ranges from 0 to $n$. 
+Note that for large $n$ one may bucketize the features. 
+
+\paragraph{Experiment 1}
+We consider 13 databases. The databases are selected from UCI Adult dataset\footnote{https://archive.ics.uci.edu/ml/datasets/adult}. 
+Each database composed of $n = 10^3$ records, but they have key domains with different sizes. 
+The considered key is the ``age'' attribute. For domain $calK$ we consider the interval 
+from the minimum age to the maximum age in the database. 
+We train a classifier for every $k_i \in D$ while considering $N=10^3$ queries for 
+each label. That is for each $i$ we assume that we know all other keys but not $k_i$, and we train a related classifier. 
+Then we compute the prediction accuracy as the number of times the 
+correct $k_i$ is predicted divided by $n$. 
+
+Table~\ref{tab:acc} presents the obtained accuracies with the computation time on an Intel 
+machine 8 VCPU 32GB RAM. 
+As a baseline we consider a classifier that always predicts the key value that has the greatest frequency in the database. 
+
+\begin{table}[!h]
+\centering
+{\setlength\tabcolsep{3pt} % default value: 6pt
+\begin{tabular}{|l|l|>{\columncolor{Gray}}l|l|>{\columncolor{Gray}}l|l|>{\columncolor{Gray}}l|l|>{\columncolor{Gray}}l|l|} 
+\hline 
+\rowcolor{Gray} 
+              &         & \multicolumn{2}{c|}{m=1}  & \multicolumn{2}{c|}{m=5}  & \multicolumn{2}{c|}{m=10}  & \multicolumn{2}{c|}{m=20} \\ \hline 
+$|\calK|$     &  BL\%   &  Acc.\%   &  Time         &  Acc.\%   &  Time         &  Acc.\%   &  Time          &  Acc.\%   &  Time         \\ \hline  
+6             &  19.1   &  100      &  08m 16s      &           &               &           &                &           &               \\ \hline 
+11            &  10.7   &  100      &  14m 05s      &           &               &           &                &           &               \\ \hline 
+16            &  8.1    &  100      &  21m 03s      &           &               &           &                &           &               \\ \hline 
+21            &  6.3    &  99       &  24m 56s      &           &               &           &                &           &               \\ \hline 
+26            &  5.1    &  93       &  32m 09s      &  100      & 2h 30m 48s    &  100      & 5h 2m 51s      &           &               \\ \hline 
+31            &  4.6    &  78       &  36m 00s      &  99.9     & 2h 58m 27s    &  100      & 6h 2m 43s      &           &               \\ \hline 
+41            &  4.3    &  55       &  49m 12s      &  98.2     & 3h 47m 34s    &  100      & 7h 42m 27s     &           &               \\ \hline 
+46            &  3.8    &  44.9     &  54m 25s      &  91.5     & 4h 18m 32s    &  100      & 8h 32m 29s     &           &               \\ \hline 
+51            &  3.7    &  36.7     &  57m 54s      &  77.9     & 4h 37m 16s    &  99.6     & 9h 15m 52s     &           &               \\ \hline 
+56            &  3.7    &  29.8     &  1h 1m 29s    &  64.1     & 5h 5m 4s      &  96.5     & 10h 0m 26s     &           &               \\ \hline 
+61            &  3.6    &  22.6     &  1h 4m 8s     &  47.7     & 5h 21m 12s    &  85.5     & 10h 45m 39s    & 98.50     & 21h 29m 18s   \\ \hline
+66            &  3.6    &  19.8     &  1h 7m 12s    &  44.0     & 5h 27m 22s    &  83.1     & 10h 50m 28s    & 97.0      & 21h 55m 21s   \\ \hline
+71            &  3.6    &  24.9     &  1h 11m 41s   &  38.6     & 6h 1m 19s     &  66.3     & 12h 4m 45s     & 95.70     & 24h 10m 06s   \\ \hline
+\end{tabular} 
+}
+\label{tab:acc}
+\caption{Accuracy and computation time.} 
+\end{table}
+
+
+\end{document}
