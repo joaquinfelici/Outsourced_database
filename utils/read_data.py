@@ -54,7 +54,7 @@ target_INDEX = 0
 #target_INDEX = 14
 
 
-def read_adult_data():
+def read_adult_data(data_file):
     """
     read adult data from 'data/adult.all'
     """
@@ -62,8 +62,8 @@ def read_adult_data():
     is_cat = [] #specifies whether an attribute is continuous or categorical
 
     att_num = len(att_INDEX)
-    data_file = open('data/adult-short.all', 'rU')
-    for line in data_file:
+    data_lines = open(data_file, 'rU')
+    for line in data_lines:
         #remove '\n' characters
         line = line.strip()
         #remove empty and incomplete lines

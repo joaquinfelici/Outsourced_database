@@ -44,6 +44,7 @@ Table~\ref{tab:acc} presents the obtained accuracies with the computation time o
 machine 8 VCPU 32GB RAM. 
 As a baseline we consider a classifier that always predicts the key value that has the greatest frequency in the database. 
 
+
 \begin{table}[!h]
 \centering
 {\setlength\tabcolsep{3pt} % default value: 6pt
@@ -72,4 +73,30 @@ $|\calK|$     &  BL\%   &  Acc.\%   &  Time         &  Acc.\%   &  Time         
 \end{table}
 
 
+\paragraph{Experiment 2}
+We assume that 10 keys are unknown, say, $k_1, \ldots, k_10$. 
+For key $k_i$ we train a classifier to predict its value. The training data is generated as before by iterating over all possible lables. 
+For other unknown keys, we set their values either to the already predicted ones ($j<i$) or to a random fixed lable ($j>i$).  
+
+We use the privacy breach increase definetion from~\cite{DBLP:conf/icde/CormodePSSY13}: $\beta\% = \frac{Acc.}{BL-1}*100$. 
+For Acc. we consider the average accuracy of all unknown records. 
+
+
+\begin{table}[!h]
+\centering
+{\setlength\tabcolsep{2pt} % default value: 6pt
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|} 
+\hline 
+\rowcolor{Gray} 
+$|\calK|$     &  H  &  S      & BL\%   &  Acc.1  &  Acc.2  &  Acc.3  &  Acc.4 &  Acc.5  &  Acc.6  &  Acc.7  &  Acc.8  &  Acc.9 &  Acc.10  & $\beta$\%  & Time          \\ \hline  
+11            &  10 &  $10^3$ & 10.7   &  13.10  &  13.30  &  14.30  & 11.80  &  12.00  &  15.30  &  14.30  &  13.80  & 16.10  &  13.90   & 142        &  21h 29m 46s     \\ \hline  %Average Ac. = 13.79 
+10            & 100 &  $10^3$ & 10.7   &  13.00  &  14.00  & 14.50   &  15.10  & 15.00  &  14.60  &  13.40  &  15.40  &  15.40  & 16.10   & 157        &  8d 22h 39m 26s   \\ \hline %Average Ac. = 14.65
+\end{tabular} 
+}
+\label{tab:acc}
+\caption{Exp 2: Accuracy and computation time. H is number of histograms per label and S is the number of samples (queries) per histogram.} 
+\end{table}
+
+\bibliographystyle{abbrv}
+\bibliography{biblio} 
 \end{document}

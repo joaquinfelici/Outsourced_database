@@ -61,9 +61,9 @@ def bucketize(data, width):
     result.append(sum_b)
     return np.array(result)
 
-def make_predictions(target_col, nb_iterations, n, hist_samples, mla='GNB'):
+def make_predictions(target_col, nb_iterations, n, hist_samples, data_file, mla='GNB'):
     # read dataset from a file
-    DATA, IS_CAT = read_adult_data()
+    DATA, IS_CAT = read_adult_data(data_file)
     # obtain the target column
     target_attribute = get_column(DATA, target_col)
     # generate all possible values in target column domain
@@ -81,7 +81,7 @@ def make_predictions(target_col, nb_iterations, n, hist_samples, mla='GNB'):
         nb_iterations = len(target_attribute)
     # iterate for every row
     for target_row in range(0, nb_iterations):
-        print ("(" + str(target_row) + ") Generating training data...")
+    #    print ("(" + str(target_row) + ") Generating training data...")
         actual_value = target_attribute[target_row]
         training_data = []
         # iterate for every possible value that the target cell may take
@@ -104,15 +104,15 @@ def make_predictions(target_col, nb_iterations, n, hist_samples, mla='GNB'):
             input[get_volume(target_attribute, pair[0], pair[1])] += 1
 
         #train a classifier
-        print "Training classifier..."
+      #  print "Training classifier..."
         clf = train_classifier(training_data, np.array(Labels), mla)  # mla specifies training algorithm to use
         #make a prediction
         predicted_value = clf.predict([input]).tolist()[0]
         if actual_value == predicted_value:
             acc += 1.0
-            print  bcolors.OKGREEN + "Prediction is correct" + bcolors.ENDC
-        else:
-            print  bcolors.FAIL + "Prediction is incorrect" + " (" + str(actual_value) + ", " + str(predicted_value) + ")" + bcolors.ENDC
+       #     print  bcolors.OKGREEN + "Prediction is correct" + bcolors.ENDC
+       # else:
+        #    print  bcolors.FAIL + "Prediction is incorrect" + " (" + str(actual_value) + ", " + str(predicted_value) + ")" + bcolors.ENDC
 
     a = '%.2f' % (acc * 100 / float(nb_iterations))
     print (bcolors.BOLD + 'Accuracy was ' + a + '%' + bcolors.ENDC)
